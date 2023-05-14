@@ -51,8 +51,8 @@ def add_tests
   to = "spec/support"
 
   inject_into_file "spec/rails_helper.rb", after: "require 'rspec/rails'\n" do
-    <<-EOF
-    Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+    <<~EOF
+      Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
     EOF
   end
 
