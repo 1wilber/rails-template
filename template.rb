@@ -42,6 +42,23 @@ def add_react
   generate_root
 end
 
+def add_tests
+  say "[+] Adding test gems", :yellow
+  run "bundle exec rails generate rspec:install"
+  run "bundle exec rails generate annotate:install"
+
+  from = "https://github.com/H4K1/rails-template/trunk/templates/spec/support"
+  to = "spec/support"
+
+  inject_into_file "spec/rails_helper.rb", after: "require 'rspec/rails'\n" do
+    <<-EOF
+    Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+    EOF
+  end
+
+  run "svn checkout #{from} #{to} --force"
+end
+
 def copy_gemfile
   say "[+] Downloading Gemfile template", :yellow
   remove_file "Gemfile"
@@ -84,6 +101,7 @@ copy_templates
 after_bundle do
   add_vite
   add_react
+  add_tests
 
   welcome_message
 end
