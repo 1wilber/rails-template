@@ -1,24 +1,25 @@
-# rails new app-name --database=postgresql -T --skip-sprockets -J 
+# rails new app-name --database=postgresql -T --skip-sprockets -J
 
 def add_vite
-  run 'bundle exec vite install'
+  run "bundle exec vite install"
 
-  say '[+] Downloading vite.config.js', :yellow
-  remove_file 'vite.config.js'
-  run 'wget -nv -O vite.config.js https://raw.githubusercontent.com/H4K1/rails-template/master/templates/vite.config.js'
+  say "[+] Downloading vite.config.js", :yellow
+  remove_file "vite.config.js"
+  run "wget -nv -O vite.config.js https://raw.githubusercontent.com/H4K1/rails-template/master/templates/vite.config.js"
 end
 
 def react_import
-  say '[+] Installing React', :yellow
-  run 'yarn add react react-dom'
+  say "[+] Installing React", :yellow
+  run "yarn add react react-dom"
 
-  say '[+] Importing React on the application.html.erb', :yellow
-  gsub_file "app/views/layouts/application.html.erb", /<%= vite_javascript_tag 'application' %>\n/, "<%= vite_javascript_tag 'application.jsx' %>"
+  say "[+] Importing React on the application.html.erb", :yellow
+  gsub_file "app/views/layouts/application.html.erb", /<%= vite_javascript_tag 'application' %>\n/,
+    "<%= vite_javascript_tag 'application.jsx' %>"
   gsub_file "app/views/layouts/application.html.erb", /<%= stylesheet_link_tag 'application', media: 'all' %>\n/, ""
 end
 
 def react_templates
-  say '[+] Copying React app', :yellow
+  say "[+] Copying React app", :yellow
   from = "https://github.com/H4K1/rails-template/trunk/templates/frontend/"
   to = "app/frontend"
 
@@ -28,10 +29,10 @@ def react_templates
 end
 
 def generate_root
-  say '[+] Generating root page', :yellow
-  generate(:controller, 'pages', 'index')
+  say "[+] Generating root page", :yellow
+  generate(:controller, "pages", "index")
   run 'echo "" > app/views/pages/index.html.erb'
-  inject_into_file 'app/views/pages/index.html.erb', '<div id="root"></div>'
+  inject_into_file "app/views/pages/index.html.erb", '<div id="root"></div>'
   route "root to: 'pages#index'"
 end
 
@@ -41,11 +42,10 @@ def add_react
   generate_root
 end
 
-
 def copy_gemfile
-  say '[+] Downloading Gemfile template', :yellow
-  remove_file 'Gemfile'
-  run 'wget -nv https://raw.githubusercontent.com/H4K1/rails-template/master/templates/Gemfile'
+  say "[+] Downloading Gemfile template", :yellow
+  remove_file "Gemfile"
+  run "wget -nv https://raw.githubusercontent.com/H4K1/rails-template/master/templates/Gemfile"
 end
 
 def copy_templates
@@ -53,7 +53,8 @@ def copy_templates
 end
 
 def add_app_config
-  inject_into_file 'config/application.rb', after: "class Application < Rails::Application\n" do <<-EOF
+  inject_into_file "config/application.rb", after: "class Application < Rails::Application\n" do
+    <<-EOF
     config.generators do |g|
       g.fixtures = false
       g.view_specs = false
@@ -63,19 +64,18 @@ def add_app_config
       g.assets = false
       g.helper = false
     end
-  EOF
-end
-
+    EOF
+  end
 end
 
 def welcome_message
   say "\n\n\n\n"
-  say 'Welcome to the Rails template!', :green
-  say 'You can getting started with the following commands:', :green
-  say 'foreman start -f Procfile.dev'
+  say "Welcome to the Rails template!", :green
+  say "You can getting started with the following commands:", :green
+  say "\tforeman start -f Procfile.dev"
   say "\n\n"
-  say "You can convert all html to haml with the following command:"
-  say "\t HAML_RAILS_DELETE_ERB=true rails haml:erb2haml"
+  say "You can convert all html to haml with the following command:", :green
+  say "\tHAML_RAILS_DELETE_ERB=true rails haml:erb2haml"
 end
 
 add_app_config
@@ -87,4 +87,3 @@ after_bundle do
 
   welcome_message
 end
-
