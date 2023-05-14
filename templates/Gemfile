@@ -6,7 +6,12 @@ ruby '2.7.1'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.3'
 gem 'pg', '~> 1.1'
 
+# Vite
 gem 'vite_rails', '~> 3.0', '>= 3.0.14'
+
+# Haml support
+gem "haml-rails", "~> 2.0"
+
 gem 'puma', '~> 5.0'
 
 gem 'bootsnap', '>= 1.4.4', require: false

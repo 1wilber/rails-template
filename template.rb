@@ -52,13 +52,33 @@ def copy_templates
   copy_gemfile
 end
 
+def add_app_config
+  inject_into_file 'config/application.rb', after: "class Application < Rails::Application\n" do <<-EOF
+    config.generators do |g|
+      g.fixtures = false
+      g.view_specs = false
+      g.helper_specs = false
+      g.routing_specs = false
+      g.template_engine = :haml
+      g.assets = false
+      g.helper = false
+    end
+  EOF
+end
+
+end
+
 def welcome_message
   say "\n\n\n\n"
   say 'Welcome to the Rails template!', :green
   say 'You can getting started with the following commands:', :green
   say 'foreman start -f Procfile.dev'
+  say "\n\n"
+  say "You can convert all html to haml with the following command:"
+  say "\t HAML_RAILS_DELETE_ERB=true rails haml:erb2haml"
 end
 
+add_app_config
 copy_templates
 
 after_bundle do
